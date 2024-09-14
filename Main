@@ -1,0 +1,32 @@
+import os
+
+# Sample virus signatures (in a real application, these would be more complex and numerous)
+VIRUS_SIGNATURES = {
+    "eicar": "X5O!P%@AP[4\\PZX54(P^)7CC)7}$",
+    # Add more signatures here
+}
+
+def scan_file(file_path):
+    """Scan a single file for known virus signatures."""
+    try:
+        with open(file_path, 'rb') as file:
+            content = file.read()
+            for name, signature in VIRUS_SIGNATURES.items():
+                if signature.encode() in content:
+                    print(f"Virus detected in {file_path}: {name}")
+                    return True
+    except Exception as e:
+        print(f"Could not read file {file_path}: {e}")
+    return False
+
+def scan_directory(directory):
+    """Scan all files in a directory for viruses."""
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            file_path = os.path.join(root, file)
+            scan_file(file_path)
+
+if __name__ == "__main__":
+    directory_to_scan = input("Enter the directory to scan for viruses: ")
+    scan_directory(directory_to_scan)
+    print("Scan complete.")
